@@ -12,6 +12,8 @@ const cardContainer = document.querySelector('.places__list');
 const cards = cardContainer.querySelectorAll('.card');
 const likeButton = document.querySelector('.card__like-button');
 const addButton = document.querySelector('.profile__add-button');
+const closeButton = document.querySelector('.popup_type_new-card .popup__close');
+const popupNewCard = document.querySelector('.popup_type_new-card');
 
 function createCity(city) {
     const cardTemplate = document.querySelector('#card-template').content;
@@ -63,3 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+addButton.addEventListener('click', function () {
+
+  popupNewCard.classList.add('popup_is-opened');
+});
+
+closeButton.addEventListener('click', function () {
+  popupNewCard.classList.remove('popup_is-opened');
+});
