@@ -10,7 +10,6 @@
 
 const cardContainer = document.querySelector('.places__list');
 const cards = cardContainer.querySelectorAll('.card');
-const deleteButton = document.querySelector('.card__delete-button');
 const likeButton = document.querySelector('.card__like-button');
 const addButton = document.querySelector('.profile__add-button');
 
@@ -21,6 +20,11 @@ function createCity(city) {
     cardElement.querySelector('.card__image').src = city.link;
     cardElement.querySelector('.card__image').alt = city.name;
     cardElement.querySelector('.card__title').textContent = city.name;
+
+    const deleteButton = cardElement.querySelector('.card__delete-button');
+    deleteButton.addEventListener('click', function () {
+        cardElement.remove();
+    });
 
     return cardElement;
 }
@@ -58,3 +62,4 @@ document.addEventListener('DOMContentLoaded', function () {
         cardContainer.append(card);
     });
 });
+
