@@ -27,7 +27,7 @@ function createCard(card, handleDelete) {
   deleteButton.addEventListener("click", handleDelete);
 
   return cardElement;
-}
+};
 
 function handleDelete(event) {
   const card = event.target.closest(".card");
