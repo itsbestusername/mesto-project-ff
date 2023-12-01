@@ -35,12 +35,12 @@ function handleDelete(event) {
   card.remove();
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-  initialCards.forEach((card) => {
-    const place = createCard(card, handleDelete);
-    cardContainer.append(place);
-  });
-});
+function addFirstCards () {
+    initialCards.forEach((card) => {
+      const place = createCard(card, handleDelete);
+      cardContainer.append(place);
+    });
+  };
 
 addButton.addEventListener("click", function () {
   popupNewCard.classList.add("popup_is-opened");
@@ -63,3 +63,5 @@ closeButton.addEventListener("click", function () {
 //   nameOfCard = "";
 //   linkOfCard = "";
 // });
+
+addFirstCards();
