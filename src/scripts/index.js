@@ -18,9 +18,10 @@ const editCloseButton = document.querySelector(
 );
 const nameEditForm = document.querySelector(".popup__input_type_name");
 const description = document.querySelector(".popup__input_type_description");
-const editForm = document.querySelector(".popup__form");
+const elementForm = document.querySelector(".popup__form");
 
 const saveButton = document.querySelector(".button .popup__button");
+
 
 function createCard(card, handleDelete) {
   const cardElement = cardTemplate
@@ -87,7 +88,22 @@ function handleFormSubmit(evt) {
   closeWindow(popupEdit);
 }
 
-editForm.addEventListener("submit", handleFormSubmit);
+function handleCreateCard(evt) {
+  evt.preventDefault();
+
+  let nameOfCard = document.querySelector(".popup__input_type_card-name").value;
+  let linkOfCard = document.querySelector(".popup__input_type_url").value;
+  
+  if (nameOfCard.length > 0 && linkOfCard.length > 0) {
+    const newCard = createCard({ name: nameOfCard, link: linkOfCard }, handleDelete);
+    cardContainer.prepend(newCard);
+  }
+
+  closeWindow(popupNewCard);
+}
+
+elementForm.addEventListener("submit", handleFormSubmit);
+elementForm.addEventListener("submit", handleCreateCard);
 
 addButton.addEventListener("click", () => {
   openWindow(popupNewCard);
@@ -110,19 +126,5 @@ editCloseButton.addEventListener("click", () => {
 
 document.addEventListener("keydown", closeOnEsc);
 // document.addEventListener('mousedown', closeOnLayout);
-
-// saveButton.addEventListener("click", function () {
-//   let nameOfCard = document.querySelector(".popup__input_type_card-name").value;
-//   let linkOfCard = document.querySelector(".popup__input_type_url").value;
-
-//   if (nameOfCard && linkOfCard) {
-//     const newCard = createCard({ name: nameOfCard, link: linkOfCard });
-//   }
-
-//   cardContainer.append(newCard);
-
-//   nameOfCard = "";
-//   linkOfCard = "";
-// });
 
 addFirstCards();
