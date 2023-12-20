@@ -1,19 +1,19 @@
-// @todo: Темплейт карточки
 
-// @todo: DOM узлы
-
-// @todo: Функция создания карточки
-
-// @todo: Функция удаления карточки
-
-// @todo: Вывести карточки на страницу
+// import '../pages/index.css';
+// import { initialCards } from './cards';
 
 const cardContainer = document.querySelector(".places__list");
 const cards = cardContainer.querySelectorAll(".card");
 const cardTemplate = document.querySelector("#card-template").content;
+
 const addButton = document.querySelector(".profile__add-button");
-const closeButton = document.querySelector(".popup_type_new-card .popup__close");
+const closeCreateButton = document.querySelector(".popup_type_new-card .popup__close");
 const popupNewCard = document.querySelector(".popup_type_new-card");
+
+const editButton = document.querySelector(".profile__edit-button");
+const popupEdit = document.querySelector(".popup_type_edit");
+const editCloseButton = document.querySelector(".popup_type_edit .popup__close");
+
 const saveButton = document.querySelector(".button .popup__button");
 
 function createCard(card, handleDelete) {
@@ -42,12 +42,28 @@ function addFirstCards () {
     });
   };
 
-addButton.addEventListener("click", function () {
-  popupNewCard.classList.add("popup_is-opened");
+function openWindow(popup) {
+  popup.classList.add("popup_is-opened");
+}
+
+function closeWindow(popup) {
+  popup.classList.remove("popup_is-opened");
+}
+
+addButton.addEventListener("click", function() {
+  openWindow(popupNewCard);
 });
 
-closeButton.addEventListener("click", function () {
-  popupNewCard.classList.remove("popup_is-opened");
+closeCreateButton.addEventListener("click", function () {
+  closeWindow(popupNewCard);
+});
+
+editButton.addEventListener("click", function() {
+  openWindow(popupEdit);
+});
+
+editCloseButton.addEventListener("click", function () {
+  closeWindow(popupEdit);
 });
 
 // saveButton.addEventListener("click", function () {
