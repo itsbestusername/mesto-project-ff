@@ -10,6 +10,7 @@ const closeCreateButton = document.querySelector(
   ".popup_type_new-card .popup__close"
 );
 const popupNewCard = document.querySelector(".popup_type_new-card");
+const elementCardForm = document.forms["new-place"];
 
 const editButton = document.querySelector(".profile__edit-button");
 const popupEdit = document.querySelector(".popup_type_edit");
@@ -21,7 +22,6 @@ const description = document.querySelector(".popup__input_type_description");
 const elementForm = document.querySelector(".popup__form");
 
 const saveButton = document.querySelector(".button .popup__button");
-
 
 function createCard(card, handleDelete) {
   const cardElement = cardTemplate
@@ -51,33 +51,33 @@ function addFirstCards() {
   });
 }
 
-function openWindow(popup) {
-  popup.classList.add("popup_is-opened");
-  popup.classList.add("popup_is-animated");
+function openClosePopup(popup, action) {
+  if (action === "open") {
+    popup.classList.add("popup_is-opened");
+    popup.classList.add("popup_is-animated");
 
-  document.addEventListener("keydown", closeOnEsc);
-  document.addEventListener('mousedown', closeOnLayout);
-}
-
-function closeWindow(popup) {
-  popup.classList.remove("popup_is-opened");
-  document.removeEventListener('keydown', closeOnEsc);
-  document.removeEventListener('mousedown', closeOnLayout);
+    document.addEventListener("keydown", closeOnEsc);
+    document.addEventListener("mousedown", closeOnLayout);
+  } else if (action === "close") {
+    popup.classList.remove("popup_is-opened");
+    document.removeEventListener("keydown", closeOnEsc);
+    document.removeEventListener("mousedown", closeOnLayout);
+  }
 }
 
 function closeOnEsc(evt) {
   if (evt.key === "Escape") {
     const popup = document.querySelector(".popup_is-opened");
-    closeWindow(popup);
+    openClosePopup(popup, "close");
   }
 }
 
 function closeOnLayout(evt) {
   if (evt.target.classList.contains("popup_is-opened")) {
-    const popup = document.querySelector(".popup_is-opened")
-    closeWindow(popup);
+    const popup = document.querySelector(".popup_is-opened");
+    openClosePopup(popup, "close");
   }
-};
+}
 
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
@@ -89,7 +89,7 @@ function handleFormSubmit(evt) {
   profileTitle.textContent = nameEditForm.value;
   profileDescription.textContent = description.value;
 
-  closeWindow(popupEdit);
+  openClosePopup(popupEdit, "close");
 }
 
 function handleCreateCard(evt) {
@@ -97,36 +97,36 @@ function handleCreateCard(evt) {
 
   let nameOfCard = document.querySelector(".popup__input_type_card-name").value;
   let linkOfCard = document.querySelector(".popup__input_type_url").value;
-  
+
   if (nameOfCard.length > 0 && linkOfCard.length > 0) {
-    const newCard = createCard({ name: nameOfCard, link: linkOfCard }, handleDelete);
+    const newCard = createCard(
+      { name: nameOfCard, link: linkOfCard },
+      handleDelete
+    );
     cardContainer.prepend(newCard);
   }
 
-  closeWindow(popupNewCard);
+  openClosePopup(popupNewCard, "close");
 }
 
 elementForm.addEventListener("submit", handleFormSubmit);
-elementForm.addEventListener("submit", handleCreateCard);
+elementCardForm.addEventListener("submit", handleCreateCard);
 
-addButton.addEventListener("click", () => {
-  openWindow(popupNewCard);
-});
+addButton.addEventListener("click", () => openClosePopup(popupNewCard, "open"));
 
 closeCreateButton.addEventListener("click", () => {
-  closeWindow(popupNewCard);
+  openClosePopup(popupNewCard, "close");
 });
 
 editButton.addEventListener("click", () => {
-  openWindow(popupEdit);
+  openClosePopup(popupEdit, "open");
 
   nameEditForm.value = "Жак-Ив Кусто";
   description.value = "Исследователь океана";
 });
 
 editCloseButton.addEventListener("click", () => {
-  closeWindow(popupEdit);
+  openClosePopup(popupEdit, "close");
 });
-
 
 addFirstCards();
