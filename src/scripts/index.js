@@ -21,9 +21,10 @@ const nameEditForm = document.querySelector(".popup__input_type_name");
 const description = document.querySelector(".popup__input_type_description");
 const elementForm = document.querySelector(".popup__form");
 
+const popupWatchImage = document.querySelector(".popup_type_image");
+const watchImageCloseButton = document.querySelector(".popup_type_image .popup__close");
 
-
-function createCard(card, handleDelete, likeOnCard) {
+function createCard(card, handleDelete, likeOnCard, watchImage) {
   const cardElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
@@ -38,6 +39,11 @@ function createCard(card, handleDelete, likeOnCard) {
   const likeButton = cardElement.querySelector(".card__like-button");
   likeButton.addEventListener("click", likeOnCard);
 
+  const cardImage = cardElement.querySelector(".card__image");
+  cardImage.addEventListener("click", () => {
+    watchImage(popupWatchImage, card.name, card.link);
+  })
+
   return cardElement;
 };
 
@@ -51,9 +57,20 @@ function likeOnCard(evt) {
   evt.target.classList.add("card__like-button_is-active");
 };
 
+function watchImage(popup, name, link) {
+  openClosePopup(popupWatchImage, "open");
+
+  let popupName = popup.querySelector(".popup__caption");
+  let popupImage = popup.querySelector(".popup__image");
+
+  popupName.textContent = name;
+  popupImage.src = link;
+  popupImage.alt = name;
+}
+
 function addFirstCards() {
   initialCards.forEach((card) => {
-    const place = createCard(card, handleDelete, likeOnCard);
+    const place = createCard(card, handleDelete, likeOnCard, watchImage);
     cardContainer.append(place);
   });
 };
@@ -138,5 +155,9 @@ editButton.addEventListener("click", () => {
 editCloseButton.addEventListener("click", () => {
   openClosePopup(popupEdit, "close");
 });
+
+watchImageCloseButton.addEventListener("click", () => {
+  openClosePopup(popupWatchImage, "close");
+})
 
 addFirstCards();
