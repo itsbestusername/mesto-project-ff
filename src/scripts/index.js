@@ -21,9 +21,9 @@ const nameEditForm = document.querySelector(".popup__input_type_name");
 const description = document.querySelector(".popup__input_type_description");
 const elementForm = document.querySelector(".popup__form");
 
-const saveButton = document.querySelector(".button .popup__button");
 
-function createCard(card, handleDelete) {
+
+function createCard(card, handleDelete, likeOnCard) {
   const cardElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
@@ -35,21 +35,28 @@ function createCard(card, handleDelete) {
   const deleteButton = cardElement.querySelector(".card__delete-button");
   deleteButton.addEventListener("click", handleDelete);
 
+  const likeButton = cardElement.querySelector(".card__like-button");
+  likeButton.addEventListener("click", likeOnCard);
+
   return cardElement;
-}
+};
 
 function handleDelete(event) {
   const card = event.target.closest(".card");
 
   card.remove();
-}
+};
+
+function likeOnCard(evt) {
+  evt.target.classList.add("card__like-button_is-active");
+};
 
 function addFirstCards() {
   initialCards.forEach((card) => {
-    const place = createCard(card, handleDelete);
+    const place = createCard(card, handleDelete, likeOnCard);
     cardContainer.append(place);
   });
-}
+};
 
 function openClosePopup(popup, action) {
   if (action === "open") {
@@ -63,21 +70,21 @@ function openClosePopup(popup, action) {
     document.removeEventListener("keydown", closeOnEsc);
     document.removeEventListener("mousedown", closeOnLayout);
   }
-}
+};
 
 function closeOnEsc(evt) {
   if (evt.key === "Escape") {
     const popup = document.querySelector(".popup_is-opened");
     openClosePopup(popup, "close");
   }
-}
+};
 
 function closeOnLayout(evt) {
   if (evt.target.classList.contains("popup_is-opened")) {
     const popup = document.querySelector(".popup_is-opened");
     openClosePopup(popup, "close");
   }
-}
+};
 
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
@@ -90,7 +97,7 @@ function handleFormSubmit(evt) {
   profileDescription.textContent = description.value;
 
   openClosePopup(popupEdit, "close");
-}
+};
 
 function handleCreateCard(evt) {
   evt.preventDefault();
@@ -107,12 +114,15 @@ function handleCreateCard(evt) {
   }
 
   openClosePopup(popupNewCard, "close");
-}
+};
+
+
+
 
 elementForm.addEventListener("submit", handleFormSubmit);
 elementCardForm.addEventListener("submit", handleCreateCard);
 
-addButton.addEventListener("click", () => openClosePopup(popupNewCard, "open"));
+addButton.addEventListener("click", () => {openClosePopup(popupNewCard, "open")});
 
 closeCreateButton.addEventListener("click", () => {
   openClosePopup(popupNewCard, "close");
