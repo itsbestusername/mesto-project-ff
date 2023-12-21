@@ -54,11 +54,15 @@ function addFirstCards() {
 function openWindow(popup) {
   popup.classList.add("popup_is-opened");
   popup.classList.add("popup_is-animated");
+
+  document.addEventListener("keydown", closeOnEsc);
+  document.addEventListener('mousedown', closeOnLayout);
 }
 
 function closeWindow(popup) {
   popup.classList.remove("popup_is-opened");
-  // document.removeEventListener('keydown', closeOnEsc);
+  document.removeEventListener('keydown', closeOnEsc);
+  document.removeEventListener('mousedown', closeOnLayout);
 }
 
 function closeOnEsc(evt) {
@@ -68,12 +72,12 @@ function closeOnEsc(evt) {
   }
 }
 
-//реализовать закрытие по клику на лэйаут
-// function closeOnLayout(evt) {
-//   if (evt.target.classList.contains(".popup_is-opened")) {
-//     closeWindow(popup);
-//   }
-// };
+function closeOnLayout(evt) {
+  if (evt.target.classList.contains("popup_is-opened")) {
+    const popup = document.querySelector(".popup_is-opened")
+    closeWindow(popup);
+  }
+};
 
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
@@ -124,7 +128,5 @@ editCloseButton.addEventListener("click", () => {
   closeWindow(popupEdit);
 });
 
-document.addEventListener("keydown", closeOnEsc);
-// document.addEventListener('mousedown', closeOnLayout);
 
 addFirstCards();
