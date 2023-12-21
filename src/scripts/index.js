@@ -1,9 +1,12 @@
-// import '../pages/index.css';
-// import { initialCards } from './cards';
+import '../pages/index.css';
+import { initialCards } from '../scripts/cards';
+import {  cardTemplate,createCard, handleDelete, likeOnCard } from '../scripts/card';
+import { openClosePopup, closeOnEsc, closeOnLayout } from '../scripts/modal';
+
 
 const cardContainer = document.querySelector(".places__list");
 const cards = cardContainer.querySelectorAll(".card");
-const cardTemplate = document.querySelector("#card-template").content;
+
 
 const addButton = document.querySelector(".profile__add-button");
 const closeCreateButton = document.querySelector(
@@ -24,39 +27,6 @@ const elementForm = document.querySelector(".popup__form");
 const popupWatchImage = document.querySelector(".popup_type_image");
 const watchImageCloseButton = document.querySelector(".popup_type_image .popup__close");
 
-function createCard(card, handleDelete, likeOnCard, watchImage) {
-  const cardElement = cardTemplate
-    .querySelector(".places__item")
-    .cloneNode(true);
-
-  cardElement.querySelector(".card__image").src = card.link;
-  cardElement.querySelector(".card__image").alt = card.name;
-  cardElement.querySelector(".card__title").textContent = card.name;
-
-  const deleteButton = cardElement.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", handleDelete);
-
-  const likeButton = cardElement.querySelector(".card__like-button");
-  likeButton.addEventListener("click", likeOnCard);
-
-  const cardImage = cardElement.querySelector(".card__image");
-  cardImage.addEventListener("click", () => {
-    watchImage(popupWatchImage, card.name, card.link);
-  })
-
-  return cardElement;
-};
-
-function handleDelete(event) {
-  const card = event.target.closest(".card");
-
-  card.remove();
-};
-
-function likeOnCard(evt) {
-  evt.target.classList.add("card__like-button_is-active");
-};
-
 function watchImage(popup, name, link) {
   openClosePopup(popupWatchImage, "open");
 
@@ -73,34 +43,6 @@ function addFirstCards() {
     const place = createCard(card, handleDelete, likeOnCard, watchImage);
     cardContainer.append(place);
   });
-};
-
-function openClosePopup(popup, action) {
-  if (action === "open") {
-    popup.classList.add("popup_is-opened");
-    popup.classList.add("popup_is-animated");
-
-    document.addEventListener("keydown", closeOnEsc);
-    document.addEventListener("mousedown", closeOnLayout);
-  } else if (action === "close") {
-    popup.classList.remove("popup_is-opened");
-    document.removeEventListener("keydown", closeOnEsc);
-    document.removeEventListener("mousedown", closeOnLayout);
-  }
-};
-
-function closeOnEsc(evt) {
-  if (evt.key === "Escape") {
-    const popup = document.querySelector(".popup_is-opened");
-    openClosePopup(popup, "close");
-  }
-};
-
-function closeOnLayout(evt) {
-  if (evt.target.classList.contains("popup_is-opened")) {
-    const popup = document.querySelector(".popup_is-opened");
-    openClosePopup(popup, "close");
-  }
 };
 
 // Обработчик «отправки» формы
@@ -131,13 +73,14 @@ function handleCreateCard(evt) {
   }
 
   openClosePopup(popupNewCard, "close");
+
 };
 
-
-
-
 elementForm.addEventListener("submit", handleFormSubmit);
-elementCardForm.addEventListener("submit", handleCreateCard);
+elementCardForm.addEventListener("submit", () => {
+  handleCreateCard();
+  elementCardForm.reset();
+});
 
 addButton.addEventListener("click", () => {openClosePopup(popupNewCard, "open")});
 
