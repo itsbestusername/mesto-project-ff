@@ -1,29 +1,15 @@
-// export function openClosePopup(popup, action) {
-//   if (action === "open") {
-//     popup.classList.add("popup_is-animated");
-//     popup.classList.add("popup_is-opened");
-
-//     document.addEventListener("keydown", closeOnEsc);
-//     document.addEventListener("mousedown", closeOnLayout);
-//   } else if (action === "close") {
-//     popup.classList.remove("popup_is-opened");
-//     document.removeEventListener("keydown", closeOnEsc);
-//     document.removeEventListener("mousedown", closeOnLayout);
-//   }
-// }
-
 export function openWindow(popup) {
   popup.classList.add("popup_is-animated");
-    popup.classList.add("popup_is-opened");
+  popup.classList.add("popup_is-opened");
 
-    document.addEventListener("keydown", closeOnEsc);
-    document.addEventListener("mousedown", closeOnLayout);
+  document.addEventListener("keydown", closeOnEsc);
+  document.addEventListener("mousedown", closeOnLayout);
 }
 
 export function closeWindow(popup) {
   popup.classList.remove("popup_is-opened");
-    document.removeEventListener("keydown", closeOnEsc);
-    document.removeEventListener("mousedown", closeOnLayout);
+  document.removeEventListener("keydown", closeOnEsc);
+  document.removeEventListener("mousedown", closeOnLayout);
 }
 
 export function closeOnEsc(evt) {

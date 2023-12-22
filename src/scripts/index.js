@@ -7,7 +7,12 @@ import {
   handleDelete,
   likeOnCard,
 } from "../scripts/card";
-import { openWindow, closeWindow, closeOnEsc, closeOnLayout } from "../scripts/modal";
+import {
+  openWindow,
+  closeWindow,
+  closeOnEsc,
+  closeOnLayout,
+} from "../scripts/modal";
 
 const cardContainer = document.querySelector(".places__list");
 const cards = cardContainer.querySelectorAll(".card");
@@ -32,11 +37,17 @@ const watchImageCloseButton = document.querySelector(
   ".popup_type_image .popup__close"
 );
 
+const popupName = document.querySelector(".popup__caption");
+const popupImage = document.querySelector(".popup__image");
+
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+
+const nameOfCard = document.querySelector(".popup__input_type_card-name").value;
+const linkOfCard = document.querySelector(".popup__input_type_url").value;
+
 function watchImage(popup, name, link) {
   openWindow(popupWatchImage);
-
-  let popupName = popup.querySelector(".popup__caption");
-  let popupImage = popup.querySelector(".popup__image");
 
   popupName.textContent = name;
   popupImage.src = link;
@@ -54,9 +65,6 @@ function addFirstCards() {
 function handleFormSubmit(evt) {
   evt.preventDefault();
 
-  let profileTitle = document.querySelector(".profile__title");
-  let profileDescription = document.querySelector(".profile__description");
-
   profileTitle.textContent = nameEditForm.value;
   profileDescription.textContent = description.value;
 
@@ -65,9 +73,6 @@ function handleFormSubmit(evt) {
 
 function handleCreateCard(evt) {
   evt.preventDefault();
-
-  let nameOfCard = document.querySelector(".popup__input_type_card-name").value;
-  let linkOfCard = document.querySelector(".popup__input_type_url").value;
 
   if (nameOfCard.length > 0 && linkOfCard.length > 0) {
     const newCard = createCard(
@@ -99,8 +104,8 @@ closeCreateButton.addEventListener("click", () => {
 editButton.addEventListener("click", () => {
   openWindow(popupEdit);
 
-  nameEditForm.value = "Жак-Ив Кусто";
-  description.value = "Исследователь океана";
+  nameEditForm.value = profileTitle.textContent;
+  description.value = profileDescription.textContent;
 });
 
 editCloseButton.addEventListener("click", () => {
