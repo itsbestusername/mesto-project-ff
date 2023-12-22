@@ -7,7 +7,7 @@ import {
   handleDelete,
   likeOnCard,
 } from "../scripts/card";
-import { openClosePopup, closeOnEsc, closeOnLayout } from "../scripts/modal";
+import { openWindow, closeWindow, closeOnEsc, closeOnLayout } from "../scripts/modal";
 
 const cardContainer = document.querySelector(".places__list");
 const cards = cardContainer.querySelectorAll(".card");
@@ -33,7 +33,7 @@ const watchImageCloseButton = document.querySelector(
 );
 
 function watchImage(popup, name, link) {
-  openClosePopup(popupWatchImage, "open");
+  openWindow(popupWatchImage);
 
   let popupName = popup.querySelector(".popup__caption");
   let popupImage = popup.querySelector(".popup__image");
@@ -60,7 +60,7 @@ function handleFormSubmit(evt) {
   profileTitle.textContent = nameEditForm.value;
   profileDescription.textContent = description.value;
 
-  openClosePopup(popupEdit, "close");
+  closeWindow(popupEdit);
 }
 
 function handleCreateCard(evt) {
@@ -79,7 +79,7 @@ function handleCreateCard(evt) {
     cardContainer.prepend(newCard);
   }
 
-  openClosePopup(popupNewCard, "close");
+  closeWindow(popupNewCard);
 }
 
 elementForm.addEventListener("submit", handleFormSubmit);
@@ -89,26 +89,26 @@ elementCardForm.addEventListener("submit", (evt) => {
 });
 
 addButton.addEventListener("click", () => {
-  openClosePopup(popupNewCard, "open");
+  openWindow(popupNewCard);
 });
 
 closeCreateButton.addEventListener("click", () => {
-  openClosePopup(popupNewCard, "close");
+  closeWindow(popupNewCard);
 });
 
 editButton.addEventListener("click", () => {
-  openClosePopup(popupEdit, "open");
+  openWindow(popupEdit);
 
   nameEditForm.value = "Жак-Ив Кусто";
   description.value = "Исследователь океана";
 });
 
 editCloseButton.addEventListener("click", () => {
-  openClosePopup(popupEdit, "close");
+  closeWindow(popupEdit);
 });
 
 watchImageCloseButton.addEventListener("click", () => {
-  openClosePopup(popupWatchImage, "close");
+  closeWindow(popupWatchImage);
 });
 
 addFirstCards();
