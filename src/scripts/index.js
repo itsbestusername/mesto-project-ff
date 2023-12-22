@@ -1,12 +1,16 @@
-import '../pages/index.css';
-import { initialCards } from '../scripts/cards';
-import {  cardTemplate,createCard, handleDelete, likeOnCard } from '../scripts/card';
-import { openClosePopup, closeOnEsc, closeOnLayout } from '../scripts/modal';
-
+import "../pages/index.css";
+import { initialCards } from "../scripts/cards";
+import {
+  cardTemplate,
+  popupWatchImage,
+  createCard,
+  handleDelete,
+  likeOnCard,
+} from "../scripts/card";
+import { openClosePopup, closeOnEsc, closeOnLayout } from "../scripts/modal";
 
 const cardContainer = document.querySelector(".places__list");
 const cards = cardContainer.querySelectorAll(".card");
-
 
 const addButton = document.querySelector(".profile__add-button");
 const closeCreateButton = document.querySelector(
@@ -24,8 +28,9 @@ const nameEditForm = document.querySelector(".popup__input_type_name");
 const description = document.querySelector(".popup__input_type_description");
 const elementForm = document.querySelector(".popup__form");
 
-const popupWatchImage = document.querySelector(".popup_type_image");
-const watchImageCloseButton = document.querySelector(".popup_type_image .popup__close");
+const watchImageCloseButton = document.querySelector(
+  ".popup_type_image .popup__close"
+);
 
 function watchImage(popup, name, link) {
   openClosePopup(popupWatchImage, "open");
@@ -43,7 +48,7 @@ function addFirstCards() {
     const place = createCard(card, handleDelete, likeOnCard, watchImage);
     cardContainer.append(place);
   });
-};
+}
 
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
@@ -56,7 +61,7 @@ function handleFormSubmit(evt) {
   profileDescription.textContent = description.value;
 
   openClosePopup(popupEdit, "close");
-};
+}
 
 function handleCreateCard(evt) {
   evt.preventDefault();
@@ -67,22 +72,25 @@ function handleCreateCard(evt) {
   if (nameOfCard.length > 0 && linkOfCard.length > 0) {
     const newCard = createCard(
       { name: nameOfCard, link: linkOfCard },
-      handleDelete
+      handleDelete,
+      likeOnCard,
+      watchImage
     );
     cardContainer.prepend(newCard);
   }
 
   openClosePopup(popupNewCard, "close");
-
-};
+}
 
 elementForm.addEventListener("submit", handleFormSubmit);
-elementCardForm.addEventListener("submit", () => {
-  handleCreateCard();
+elementCardForm.addEventListener("submit", (evt) => {
+  handleCreateCard(evt);
   elementCardForm.reset();
 });
 
-addButton.addEventListener("click", () => {openClosePopup(popupNewCard, "open")});
+addButton.addEventListener("click", () => {
+  openClosePopup(popupNewCard, "open");
+});
 
 closeCreateButton.addEventListener("click", () => {
   openClosePopup(popupNewCard, "close");
@@ -101,6 +109,6 @@ editCloseButton.addEventListener("click", () => {
 
 watchImageCloseButton.addEventListener("click", () => {
   openClosePopup(popupWatchImage, "close");
-})
+});
 
 addFirstCards();
