@@ -1,4 +1,7 @@
-export function openWindow(popup) {
+import {elementForm, validationConfig, clearValidation} from "./validation";
+export { openWindow, closeWindow, closeOnEsc, closeOnLayout };
+
+function openWindow(popup) {
   popup.classList.add("popup_is-animated");
   popup.classList.add("popup_is-opened");
 
@@ -6,20 +9,21 @@ export function openWindow(popup) {
   document.addEventListener("mousedown", closeOnLayout);
 }
 
-export function closeWindow(popup) {
+function closeWindow(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeOnEsc);
   document.removeEventListener("mousedown", closeOnLayout);
+  clearValidation(elementForm, validationConfig);
 }
 
-export function closeOnEsc(evt) {
+function closeOnEsc(evt) {
   if (evt.key === "Escape") {
     const popup = document.querySelector(".popup_is-opened");
     closeWindow(popup);
   }
 }
 
-export function closeOnLayout(evt) {
+function closeOnLayout(evt) {
   if (evt.target.classList.contains("popup_is-opened")) {
     const popup = document.querySelector(".popup_is-opened");
     closeWindow(popup);

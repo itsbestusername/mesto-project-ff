@@ -13,6 +13,18 @@ import {
   closeOnEsc,
   closeOnLayout,
 } from "../scripts/modal";
+import {
+  elementForm,
+  inputElements,
+  showError,
+  hideError,
+  checkInputValidity,
+  hasInvalidInput,
+  changeButtonState,
+  addListeners,
+  enableValidation,
+  clearValidation,
+} from "./validation";
 
 const cardContainer = document.querySelector(".places__list");
 const cards = cardContainer.querySelectorAll(".card");
@@ -31,7 +43,6 @@ const editCloseButton = document.querySelector(
 );
 const nameEditForm = document.querySelector(".popup__input_type_name");
 const description = document.querySelector(".popup__input_type_description");
-const elementForm = document.querySelector(".popup__form");
 
 const watchImageCloseButton = document.querySelector(
   ".popup_type_image .popup__close"
@@ -115,5 +126,19 @@ editCloseButton.addEventListener("click", () => {
 watchImageCloseButton.addEventListener("click", () => {
   closeWindow(popupWatchImage);
 });
+
+inputElements.forEach((inputElement) => {
+  inputElement.addEventListener("input", function () {
+      checkInputValidity(elementForm, inputElement);
+    });
+});
+
+elementForm.addEventListener("submit", function (evt) {
+    evt.preventDefault();
+    inputElements.forEach((inputElement) => {
+      checkInputValidity(elementForm, inputElement);
+    });
+  });
+
 
 addFirstCards();

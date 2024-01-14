@@ -1,7 +1,9 @@
-export const cardTemplate = document.querySelector("#card-template").content;
-export const popupWatchImage = document.querySelector(".popup_type_image");
+export { cardTemplate, popupWatchImage, createCard, handleDelete, likeOnCard };
 
-export function createCard(card, handleDelete, likeOnCard, watchImage) {
+const cardTemplate = document.querySelector("#card-template").content;
+const popupWatchImage = document.querySelector(".popup_type_image");
+
+function createCard(card, handleDelete, likeOnCard, watchImage) {
   const cardElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
@@ -24,12 +26,12 @@ export function createCard(card, handleDelete, likeOnCard, watchImage) {
   return cardElement;
 }
 
-export function handleDelete(event) {
+function handleDelete(event) {
   const card = event.target.closest(".card");
 
   card.remove();
 }
 
-export function likeOnCard(evt) {
+function likeOnCard(evt) {
   evt.target.classList.add("card__like-button_is-active");
 }
