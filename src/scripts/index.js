@@ -16,6 +16,7 @@ import {
 import {
   elementForm,
   inputElements,
+  validationConfig,
   showError,
   hideError,
   checkInputValidity,
@@ -106,6 +107,7 @@ elementCardForm.addEventListener("submit", (evt) => {
 
 addButton.addEventListener("click", () => {
   openWindow(popupNewCard);
+  clearValidation(elementForm, validationConfig);
 });
 
 closeCreateButton.addEventListener("click", () => {
@@ -114,6 +116,7 @@ closeCreateButton.addEventListener("click", () => {
 
 editButton.addEventListener("click", () => {
   openWindow(popupEdit);
+  clearValidation(elementForm, validationConfig);
 
   nameEditForm.value = profileTitle.textContent;
   description.value = profileDescription.textContent;
