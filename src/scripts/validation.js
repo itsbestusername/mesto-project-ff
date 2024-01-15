@@ -42,7 +42,11 @@ const hideError = (elementForm, inputElement) => {
 
 const checkInputValidity = (elementForm, inputElement) => {
   const regex = /^[a-zA-Zа-яА-Я\s\-ёЁ]+$/;
-  if (!regex.test(inputElement.value) && inputElement.id !== "link-input") {
+  if (inputElement.value.trim() === "") {
+    inputElement.setCustomValidity(
+        "Вы пропустили это поле."
+      );
+    } else if (!regex.test(inputElement.value) && inputElement.id !== "link-input") {
     // встроенный метод setCustomValidity принимает на вход строку
     // и заменяет ею стандартное сообщение об ошибке
     inputElement.setCustomValidity(
@@ -53,7 +57,7 @@ const checkInputValidity = (elementForm, inputElement) => {
     // стандартные браузерные сообщения
     inputElement.setCustomValidity("");
   }
-  if (!inputElement.validity.valid) {
+  if (!inputElement.validity.valid && inputElement.value.length > 0) {
     showError(elementForm, inputElement, inputElement.validationMessage);
   } else {
     hideError(elementForm, inputElement);
