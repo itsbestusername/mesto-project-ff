@@ -27,7 +27,23 @@ import {
   clearValidation,
 } from "./validation";
 
-const cardContainer = document.querySelector(".places__list");
+import {
+  cohortId,
+  token,
+  profileTitle,
+  profileDescription,
+  profileAvatar,
+  cardContainer,
+  popupName,
+  popupImage,
+  watchImage,
+  handleResponse,
+  getUserInfo,
+  getInitialCards,
+  updateUserInfo,
+  addNewCard
+} from "./api";
+
 const cards = cardContainer.querySelectorAll(".card");
 
 const addButton = document.querySelector(".profile__add-button");
@@ -49,49 +65,31 @@ const watchImageCloseButton = document.querySelector(
   ".popup_type_image .popup__close"
 );
 
-const popupName = document.querySelector(".popup__caption");
-const popupImage = document.querySelector(".popup__image");
-
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-
-const nameOfCard = document.querySelector(".popup__input_type_card-name").value;
-const linkOfCard = document.querySelector(".popup__input_type_url").value;
-
-function watchImage(popup, name, link) {
-  openWindow(popupWatchImage);
-
-  popupName.textContent = name;
-  popupImage.src = link;
-  popupImage.alt = name;
-}
-
-function addFirstCards() {
-  initialCards.forEach((card) => {
-    const place = createCard(card, handleDelete, likeOnCard, watchImage);
-    cardContainer.append(place);
-  });
-}
+let nameOfCard = document.querySelector(".popup__input_type_card-name");
+let linkOfCard = document.querySelector(".popup__input_type_url");
+const nameValue = nameOfCard.value;
+const linkValue = linkOfCard.value;
 
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
   evt.preventDefault();
 
-  profileTitle.textContent = nameEditForm.value;
-  profileDescription.textContent = description.value;
+  const newName = nameEditForm.value;
+  const newAbout = description.value;
 
+  updateUserInfo(newName, newAbout);
   closeWindow(popupEdit);
 }
 
 function handleCreateCard(evt) {
   evt.preventDefault();
 
-  if (nameOfCard.length > 0 && linkOfCard.length > 0) {
+  const nameOfNewCard = nameOfCard.value;
+  const linkOfNewCard = linkOfCard.value;
+
+  if (nameOfNewCard.length > 0 && linkOfNewCard.length > 0) {
     const newCard = createCard(
-      { name: nameOfCard, link: linkOfCard },
-      handleDelete,
-      likeOnCard,
-      watchImage
+      { name: nameOfNewCard, link: linkOfNewCard }
     );
     cardContainer.prepend(newCard);
   }
@@ -100,6 +98,7 @@ function handleCreateCard(evt) {
 }
 
 elementForm.addEventListener("submit", handleFormSubmit);
+
 elementCardForm.addEventListener("submit", (evt) => {
   handleCreateCard(evt);
   elementCardForm.reset();
@@ -107,16 +106,15 @@ elementCardForm.addEventListener("submit", (evt) => {
 
 addButton.addEventListener("click", () => {
   openWindow(popupNewCard);
-  clearValidation(elementForm, validationConfig);
 });
 
 closeCreateButton.addEventListener("click", () => {
   closeWindow(popupNewCard);
+  elementCardForm.reset();
 });
 
 editButton.addEventListener("click", () => {
   openWindow(popupEdit);
-  clearValidation(elementForm, validationConfig);
 
   nameEditForm.value = profileTitle.textContent;
   description.value = profileDescription.textContent;
@@ -132,16 +130,13 @@ watchImageCloseButton.addEventListener("click", () => {
 
 inputElements.forEach((inputElement) => {
   inputElement.addEventListener("input", function () {
-      checkInputValidity(elementForm, inputElement);
-    });
+    checkInputValidity(elementForm, inputElement);
+  });
 });
 
 elementForm.addEventListener("submit", function (evt) {
-    evt.preventDefault();
-    inputElements.forEach((inputElement) => {
-      checkInputValidity(elementForm, inputElement);
-    });
+  evt.preventDefault();
+  inputElements.forEach((inputElement) => {
+    checkInputValidity(elementForm, inputElement);
   });
-
-
-addFirstCards();
+});
