@@ -6,7 +6,7 @@
   font-size: 14px;
   line-height: 18px;
   box-sizing: border-box;
-  padding: 10px 0 0;
+  padding: 24px 0 0; /*10px 0 0*/
   margin-bottom: 10px;
 }
 
@@ -18,13 +18,9 @@
   margin-bottom: 0;
 }
 
-.popup__input {
-  position: relative;
-}
-
-.popup__input + .popup__input-error {
-  position: absolute;
-  inset: 137px 38px;
+.popup__input-error {
+  /* position: absolute;
+  inset: 137px 38px; */
   inline-size: 80%;
   block-size: 8%;
   font-family: Inter;
