@@ -13,7 +13,9 @@ function closeWindow(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeOnEsc);
   document.removeEventListener("mousedown", closeOnLayout);
-  clearValidation(elementForm, validationConfig);
+
+  // const form = popup.querySelector(validationConfig.formSelector)
+  // clearValidation(form, validationConfig);
 }
 
 function closeOnEsc(evt) {

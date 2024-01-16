@@ -111,6 +111,9 @@ addButton.addEventListener("click", () => {
 closeCreateButton.addEventListener("click", () => {
   closeWindow(popupNewCard);
   elementCardForm.reset();
+
+  const form = popupNewCard.querySelector(validationConfig.formSelector);
+  clearValidation(form, validationConfig);
 });
 
 editButton.addEventListener("click", () => {
@@ -122,6 +125,9 @@ editButton.addEventListener("click", () => {
 
 editCloseButton.addEventListener("click", () => {
   closeWindow(popupEdit);
+
+  const form = popupEdit.querySelector(validationConfig.formSelector);
+  clearValidation(form, validationConfig);
 });
 
 watchImageCloseButton.addEventListener("click", () => {
