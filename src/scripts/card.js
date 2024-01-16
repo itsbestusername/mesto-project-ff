@@ -1,4 +1,5 @@
-import { addLike, removeLike } from "./api";
+import { addLike, removeLike, cohortId, token, handleResponse } from "./api";
+import { openWindow, closeWindow } from "./modal";
 export { cardTemplate, popupWatchImage, createCard, handleDelete, likeOnCard };
 
 const cardTemplate = document.querySelector("#card-template").content;
@@ -12,9 +13,6 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
   cardElement.querySelector(".card__image").src = card.link;
   cardElement.querySelector(".card__image").alt = card.name;
   cardElement.querySelector(".card__title").textContent = card.name;
-
-  const deleteButton = cardElement.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", handleDelete);
 
   const likeButton = cardElement.querySelector(".card__like-button");
   likeButton.addEventListener("click", function () {
@@ -31,18 +29,49 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
     watchImage(popupWatchImage, card.name, card.link);
   });
 
+  const deleteButton = cardElement.querySelector(".card__delete-button");
+  fetch(`https://nomoreparties.co/v1/${cohortId}/users/me`, {
+    method: "GET",
+    headers: {
+      authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then(handleResponse)
+    .then((res) => {
+      if (card.owner._id === res._id) {
+        deleteButton.addEventListener("click", handleDelete);
+      } else {
+        deleteButton.style.display = "none";
+      }
+    })
+    .catch((res) => {
+      console.error("Ошибка сравнения id карты");
+    });
+
   return cardElement;
 }
 
-function handleDelete(event) {
-  const card = event.target.closest(".card");
+function handleDelete() {
+  const popupDelete = document.querySelector(".popup_type_delete");
+  const confirmButton = popupDelete.querySelector(".popup_type_delete-button");
+  const closeButton = popupDelete.querySelector(".popup__close");
 
-  card.remove();
+  openWindow(popupDelete);
+
+  // Обработчик для кнопки подтверждения удаления
+  confirmButton.addEventListener("click", () => {
+    const card = confirmButton.closest(".card");
+    // console.log(card);
+
+    card.remove();
+    closeWindow(popupDelete);
+  });
+  // Обработчик для крестика (закрытия попапа без удаления)
+  closeButton.addEventListener("click", () => {
+    closeWindow(popupDelete);
+  });
 }
-
-// function likeOnCard(evt) {
-//   evt.target.classList.add("card__like-button_is-active");
-// }
 
 function likeOnCard(cardId, likeButton, likeCounter) {
   const isLiked = likeButton.classList.contains("card__like-button_is-active");

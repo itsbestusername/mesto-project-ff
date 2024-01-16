@@ -93,7 +93,6 @@ function handleCreateCard(evt) {
 
     addNewCard(newCard)
       .then((newCard) => {
-        console.log("На страницу добавлена новая карточка:", newCard);
         const newCardElement = createCard(
           newCard,
           handleDelete,
