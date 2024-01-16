@@ -1,5 +1,4 @@
 import "../pages/index.css";
-import { initialCards } from "../scripts/cards";
 import {
   cardTemplate,
   popupWatchImage,
@@ -28,20 +27,22 @@ import {
 } from "./validation";
 
 import {
-  cohortId,
-  token,
-  profileTitle,
-  profileDescription,
-  profileAvatar,
-  cardContainer,
-  popupName,
-  popupImage,
-  watchImage,
-  handleResponse,
-  getUserInfo,
-  getInitialCards,
-  updateUserInfo,
-  addNewCard,
+  cohortId, 
+    token, 
+    profileTitle, 
+    profileDescription,
+    profileAvatar,
+    cardContainer,
+    popupName,
+    popupImage, 
+    watchImage, 
+    handleResponse,
+    getUserInfo,
+    getInitialCards,
+    updateUserInfo,
+    addNewCard,
+    addLike,
+    removeLike
 } from "./api";
 
 const cards = cardContainer.querySelectorAll(".card");
@@ -107,6 +108,8 @@ function handleCreateCard(evt) {
       .catch((err) => {
         console.error("Ошибка при добавлении карточки на страницу:", err);
       });
+  } else {
+    console.error('Ошибка: Новая карточка не получена от сервера.');
   }
 }
 
