@@ -38,6 +38,7 @@ function watchImage(popup, name, link) {
 
 const handleResponse = res => {
     if (res.ok) {
+    console.log(res);
         return res.json();
       }
       // если ошибка, отклоняем промис
@@ -102,7 +103,7 @@ function updateUserInfo(name, about) {
 }
 
 function addNewCard(cardData) {
-    fetch(`https://nomoreparties.co/v1/${cohortId}/cards`, {
+   return fetch(`https://nomoreparties.co/v1/${cohortId}/cards`, {
         method: 'POST',
         headers: {
           authorization: `${token}`,
@@ -114,13 +115,4 @@ function addNewCard(cardData) {
         })
       })
       .then(handleResponse)
-  .then((newCard) => {
-    console.log('Добавлена новая карточка:', newCard);
-    
-    const newCardElement = createCard(newCard, handleDelete, likeOnCard, watchImage);
-    cardContainer.prepend(newCardElement);
-  })
-  .catch((err) => {
-    console.log('Ошибка при добавлении новой карточки:', err);
-  })
 }

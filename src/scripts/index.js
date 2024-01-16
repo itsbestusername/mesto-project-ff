@@ -41,7 +41,7 @@ import {
   getUserInfo,
   getInitialCards,
   updateUserInfo,
-  addNewCard
+  addNewCard,
 } from "./api";
 
 const cards = cardContainer.querySelectorAll(".card");
@@ -88,20 +88,32 @@ function handleCreateCard(evt) {
   const linkOfNewCard = linkOfCard.value;
 
   if (nameOfNewCard.length > 0 && linkOfNewCard.length > 0) {
-    const newCard = createCard(
-      { name: nameOfNewCard, link: linkOfNewCard }
-    );
-    cardContainer.prepend(newCard);
-  }
+    const newCard = { name: nameOfNewCard, link: linkOfNewCard };
 
-  closeWindow(popupNewCard);
+    addNewCard(newCard)
+      .then((newCard) => {
+        console.log("На страницу добавлена новая карточка:", newCard);
+        const newCardElement = createCard(
+          newCard,
+          handleDelete,
+          likeOnCard,
+          watchImage
+        );
+        cardContainer.prepend(newCardElement);
+
+        closeWindow(popupNewCard);
+        elementCardForm.reset();
+      })
+      .catch((err) => {
+        console.error("Ошибка при добавлении карточки на страницу:", err);
+      });
+  }
 }
 
 elementForm.addEventListener("submit", handleFormSubmit);
 
 elementCardForm.addEventListener("submit", (evt) => {
   handleCreateCard(evt);
-  elementCardForm.reset();
 });
 
 addButton.addEventListener("click", () => {
