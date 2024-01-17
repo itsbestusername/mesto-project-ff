@@ -41,22 +41,23 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
     .then(handleResponse)
     .then((res) => {
       if (card.owner._id === res._id) {
-        deleteButton.addEventListener("click", () =>  {
+        deleteButton.addEventListener("click", () => {
           const popupDelete = document.querySelector(".popup_type_delete");
-          const confirmButton = popupDelete.querySelector(".popup_type_delete-button");
+          const confirmButton = popupDelete.querySelector(
+            ".popup_type_delete-button"
+          );
           const closeButton = popupDelete.querySelector(".popup__close");
-;
           openWindow(popupDelete);
           // Обработчик для кнопки подтверждения удаления
-  confirmButton.addEventListener("click", (evt) => {
-    handleDelete(evt);
-    closeWindow(popupDelete);
-  });
-  
-  // Обработчик для крестика (закрытия попапа без удаления)
-  closeButton.addEventListener("click", () => {
-    closeWindow(popupDelete);
-  });
+          confirmButton.addEventListener("click", (evt) => {
+            handleDelete(evt);
+            closeWindow(popupDelete);
+          });
+
+          // Обработчик для крестика (закрытия попапа без удаления)
+          closeButton.addEventListener("click", () => {
+            closeWindow(popupDelete);
+          });
         });
       } else {
         deleteButton.style.display = "none";
@@ -70,8 +71,8 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
 }
 
 function handleDelete(evt) {
-card = evt.target.closest(".card");
-card.remove();
+  card = evt.target.closest(".card");
+  card.remove();
 }
 
 function likeOnCard(cardId, likeButton, likeCounter) {
