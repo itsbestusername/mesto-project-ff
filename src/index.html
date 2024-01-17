@@ -24,7 +24,13 @@
             class="profile__image"
             style="
               background-image: url('<%=require('../src/images/avatar.jpg')%>')"
-          ></div>
+          >
+            <span class="profile__image-layout">
+              <svg class="profile__image-edit" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                <use href="<%=require('../src/images/avatar-pencil.svg')%>#edit-avatar" fill="currentColor"></use>
+              </svg> 
+            </span>
+        </div>
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <button class="profile__edit-button" type="button"></button>

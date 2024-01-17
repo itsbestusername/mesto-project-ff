@@ -9,6 +9,28 @@
   margin: 0 29px 0 0;
 }
 
+.profile__image-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out; /* Плавное появление/исчезание */
+}
+
+.profile__image:hover .profile__image-layout {
+  opacity: 0.8;
+}
+
+.profile__image-edit {
+  width: 26px;
+  height: 26px;
+  fill: white;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 740px) {
   .profile__image {
     margin: 0 10px 0 0;
