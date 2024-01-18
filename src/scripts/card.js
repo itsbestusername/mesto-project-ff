@@ -1,10 +1,12 @@
-import { addLike, removeLike, cohortId, token, handleResponse } from "./api";
+import { addLike, removeLike, cohortId, token, handleResponse, compareIdCard, updateAvatar, deleteCardOnServer } from "./api";
 import { openWindow, closeWindow } from "./modal";
-export { cardTemplate, popupWatchImage, createCard, handleDelete, likeOnCard };
+export { cardTemplate, popupWatchImage, createCard, handleDelete, likeOnCard, popupDelete, card, cardIdDelete };
 
 const cardTemplate = document.querySelector("#card-template").content;
 const popupWatchImage = document.querySelector(".popup_type_image");
+const popupDelete = document.querySelector(".popup_type_delete");
 let card;
+let cardIdDelete;
 
 function createCard(card, handleDelete, likeOnCard, watchImage) {
   const cardElement = cardTemplate
@@ -31,33 +33,17 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
   });
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  fetch(`https://nomoreparties.co/v1/${cohortId}/users/me`, {
-    method: "GET",
-    headers: {
-      authorization: `${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then(handleResponse)
+  compareIdCard()
     .then((res) => {
       if (card.owner._id === res._id) {
-        deleteButton.addEventListener("click", () => {
-          const popupDelete = document.querySelector(".popup_type_delete");
-          const confirmButton = popupDelete.querySelector(
-            ".popup_type_delete-button"
-          );
-          const closeButton = popupDelete.querySelector(".popup__close");
-          openWindow(popupDelete);
-          // Обработчик для кнопки подтверждения удаления
-          confirmButton.addEventListener("click", (evt) => {
-            handleDelete(evt);
-            closeWindow(popupDelete);
-          });
+        deleteButton.addEventListener("click", (evt) => {
+          console.log(evt); //
+          card = evt.target.closest(".card"); //сохраняю карточку в переменную
+          cardIdDelete = card._id;
+          console.log(card);//
+          console.log(cardIdDelete);//
 
-          // Обработчик для крестика (закрытия попапа без удаления)
-          closeButton.addEventListener("click", () => {
-            closeWindow(popupDelete);
-          });
+          openWindow(popupDelete);
         });
       } else {
         deleteButton.style.display = "none";
@@ -70,9 +56,16 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
   return cardElement;
 }
 
-function handleDelete(evt) {
-  card = evt.target.closest(".card");
-  card.remove();
+function handleDelete() {
+  console.log(cardIdDelete);//
+  deleteCardOnServer(cardIdDelete)
+  .then(() => {
+    card.remove();
+    closeWindow(popupDelete);
+  })
+  .catch((err) => {
+    console.error("Ошибка при удалении карточки:", err);
+  })
 }
 
 function likeOnCard(cardId, likeButton, likeCounter) {
@@ -100,3 +93,5 @@ function likeOnCard(cardId, likeButton, likeCounter) {
       });
   }
 }
+
+

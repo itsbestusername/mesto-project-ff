@@ -18,6 +18,9 @@ export {
   addNewCard,
   addLike,
   removeLike,
+  compareIdCard,
+  deleteCardOnServer,
+  updateAvatar
 };
 
 const cohortId = "wff-cohort-4";
@@ -114,7 +117,8 @@ function addNewCard(cardData) {
       name: cardData.name,
       link: cardData.link,
     }),
-  }).then(handleResponse);
+  })
+  .then(handleResponse);
 }
 
 function addLike(cardId, likeButton, likeCounter) {
@@ -140,4 +144,40 @@ function removeLike(cardId, likeButton, likeCounter) {
       },
     }
   ).then(handleResponse);
+}
+
+function compareIdCard() {
+    return  fetch(`https://nomoreparties.co/v1/${cohortId}/users/me`, {
+        method: "GET",
+        headers: {
+          authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then(handleResponse)
+}
+
+function deleteCardOnServer(cardId) {
+    return fetch(`https://nomoreparties.co/v1/${cohortId}/cards/${cardId}`,
+    {
+        method: "DELETE",
+        headers: {
+            authorization: `${token}`,
+        },
+    })
+    .then(handleResponse)
+}
+
+function updateAvatar(ava) {
+    return fetch(`https://nomoreparties.co/v1/${cohortId}/users/me/avatar`,
+    {
+        method: "PATCH",
+        headers: {
+            authorization: `${token}`,
+        },
+        body: JSON.stringify({
+            avatar: ava,
+        })
+    })
+    .then(handleResponse);
 }

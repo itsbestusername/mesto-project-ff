@@ -5,6 +5,8 @@ import {
   createCard,
   handleDelete,
   likeOnCard,
+  popupDelete,
+  card
 } from "../scripts/card";
 import {
   openWindow,
@@ -27,22 +29,25 @@ import {
 } from "./validation";
 
 import {
-  cohortId, 
-    token, 
-    profileTitle, 
-    profileDescription,
-    profileAvatar,
-    cardContainer,
-    popupName,
-    popupImage, 
-    watchImage, 
-    handleResponse,
-    getUserInfo,
-    getInitialCards,
-    updateUserInfo,
-    addNewCard,
-    addLike,
-    removeLike
+  cohortId,
+  token,
+  profileTitle,
+  profileDescription,
+  profileAvatar,
+  cardContainer,
+  popupName,
+  popupImage,
+  watchImage,
+  handleResponse,
+  getUserInfo,
+  getInitialCards,
+  updateUserInfo,
+  addNewCard,
+  addLike,
+  removeLike,
+  compareIdCard,
+  deleteCardOnServer,
+  updateAvatar
 } from "./api";
 
 const cards = cardContainer.querySelectorAll(".card");
@@ -70,6 +75,12 @@ let nameOfCard = document.querySelector(".popup__input_type_card-name");
 let linkOfCard = document.querySelector(".popup__input_type_url");
 const nameValue = nameOfCard.value;
 const linkValue = linkOfCard.value;
+
+const confirmButton = popupDelete.querySelector(
+  ".popup_type_delete-button"
+);
+const closeButtonPopupDelete = popupDelete.querySelector(".popup__close");
+
 
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
@@ -159,4 +170,15 @@ elementForm.addEventListener("submit", function (evt) {
   inputElements.forEach((inputElement) => {
     checkInputValidity(elementForm, inputElement);
   });
+});
+
+// Обработчик для кнопки подтверждения удаления
+confirmButton.addEventListener("click", () => {
+  handleDelete();
+  console.log("клик сработал")//
+});
+
+// Обработчик для крестика (закрытия попапа без удаления)
+closeButtonPopupDelete.addEventListener("click", () => {
+  closeWindow(popupDelete);
 });
