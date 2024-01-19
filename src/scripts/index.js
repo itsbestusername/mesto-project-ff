@@ -12,22 +12,21 @@ import {
   closeWindow
 } from "../scripts/modal";
 import {
-  elementForm,
-  inputElements,
+  nameEditForm,
+  description,
   validationConfig,
-  checkInputValidity,
   clearValidation
 } from "./validation";
 
 import {
+  getUserInfo,
+  getInitialCards,
   profileTitle,
   profileDescription,
   profileAvatar,
   cardContainer,
   editAvatarButton,
   popupEditAvatar,
-  watchImage,
-  updateUserInfo,
   addNewCard,
   updateAvatar
 } from "./api";
@@ -47,8 +46,8 @@ const popupEdit = document.querySelector(".popup_type_edit");
 const editCloseButton = document.querySelector(
   ".popup_type_edit .popup__close"
 );
-const nameEditForm = document.querySelector(".popup__input_type_name");
-const description = document.querySelector(".popup__input_type_description");
+// const nameEditForm = document.querySelector(".popup__input_type_name");
+// const description = document.querySelector(".popup__input_type_description");
 const editProfileForm = document.forms["edit-profile"];
 const saveProfileButton = editProfileForm.querySelector(".popup__button");
 
@@ -69,6 +68,17 @@ const avatarForm = document.forms["new-avatar"];
 const saveAvaButton = avatarForm.querySelector(".popup__button");
 const avatarElement = document.querySelector(".popup_type_new-avatar")
 const closeAvatarButton = avatarElement.querySelector(".popup__close")
+
+
+Promise.all([getUserInfo, getInitialCards])
+  .then(([userInfo, initialCards]) => {
+    profileTitle.textContent = userInfo.name;
+    profileDescription.textContent = userInfo.about;
+    profileAvatar.style.backgroundImage = `url('${userInfo.avatar}')`;
+  })
+  .catch((err) => {
+    console.log("Ошибка при загрузке данных: ", err);
+  });
 
 editAvatarButton.addEventListener("click", () => {
   openWindow(popupEditAvatar);
@@ -112,18 +122,6 @@ function createAvatarElement(link) {
   return profileAvatar;
 }
 
-// Обработчик «отправки» формы
-function handleFormSubmit(evt) {
-  evt.preventDefault();
-
-  const newName = nameEditForm.value;
-  const newAbout = description.value;
-
-  changeButtonWord(saveProfileButton);
-  updateUserInfo(newName, newAbout);
-  closeWindow(popupEdit);
-}
-
 function handleCreateCard(evt) {
   evt.preventDefault();
 
@@ -153,8 +151,6 @@ function handleCreateCard(evt) {
     console.error("Ошибка: Новая карточка не получена от сервера.");
   }
 }
-
-elementForm.addEventListener("submit", handleFormSubmit);
 
 elementCardForm.addEventListener("submit", (evt) => {
   handleCreateCard(evt);
@@ -191,19 +187,6 @@ editCloseButton.addEventListener("click", () => {
 
 watchImageCloseButton.addEventListener("click", () => {
   closeWindow(popupWatchImage);
-});
-
-inputElements.forEach((inputElement) => {
-  inputElement.addEventListener("input", function () {
-    checkInputValidity(elementForm, inputElement);
-  });
-});
-
-elementForm.addEventListener("submit", function (evt) {
-  evt.preventDefault();
-  inputElements.forEach((inputElement) => {
-    checkInputValidity(elementForm, inputElement);
-  });
 });
 
 // Обработчик для кнопки подтверждения удаления

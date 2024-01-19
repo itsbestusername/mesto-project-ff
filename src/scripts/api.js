@@ -4,6 +4,8 @@ import { openWindow } from "./modal";
 export {
     cohortId,
     token,
+    getUserInfo,
+    getInitialCards,
     profileTitle,
     profileDescription,
     profileAvatar,
@@ -14,8 +16,6 @@ export {
     popupEditAvatar,
     watchImage,
     handleResponse,
-    getUserInfo,
-    getInitialCards,
     updateUserInfo,
     addNewCard,
     addLike,
@@ -74,15 +74,6 @@ const getInitialCards = fetch(`https://nomoreparties.co/v1/${cohortId}/cards`, {
     });
   });
 
-Promise.all([getUserInfo, getInitialCards])
-  .then(([userInfo, initialCards]) => {
-    profileTitle.textContent = userInfo.name;
-    profileDescription.textContent = userInfo.about;
-    profileAvatar.style.backgroundImage = `url('${userInfo.avatar}')`;
-  })
-  .catch((err) => {
-    console.log("Ошибка при загрузке данных: ", err);
-  });
 
 function watchImage(popup, name, link) {
   openWindow(popupWatchImage);

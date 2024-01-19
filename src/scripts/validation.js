@@ -1,15 +1,8 @@
 export {
-  elementForm,
-  inputElements,
+  nameEditForm,
+  description,
   validationConfig,
-  showError,
-  hideError,
-  checkInputValidity,
-  hasInvalidInput,
-  changeButtonState,
-  addListeners,
-  enableValidation,
-  clearValidation,
+  clearValidation
 };
 
 const elementForm = document.querySelector(".popup__form");
@@ -22,6 +15,8 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible",
 };
+const nameEditForm = document.querySelector(".popup__input_type_name");
+const description = document.querySelector(".popup__input_type_description");
 
 const showError = (elementForm, inputElement, errorMessage) => {
   const formError = elementForm.querySelector(`.${inputElement.id}-error`);
@@ -63,6 +58,18 @@ const checkInputValidity = (elementForm, inputElement) => {
     hideError(elementForm, inputElement);
   }
 };
+
+// Обработчик «отправки» формы
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+
+  const newName = nameEditForm.value;
+  const newAbout = description.value;
+
+  changeButtonWord(saveProfileButton);
+  updateUserInfo(newName, newAbout);
+  closeWindow(popupEdit);
+}
 
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
@@ -120,5 +127,21 @@ function clearValidation(elementForm, validationConfig) {
 
   changeButtonState(inputList, buttonSubmit);
 }
+
+elementForm.addEventListener("submit", handleFormSubmit);
+
+inputElements.forEach((inputElement) => {
+  inputElement.addEventListener("input", function () {
+    checkInputValidity(elementForm, inputElement);
+  });
+});
+
+elementForm.addEventListener("submit", function (evt) {
+  evt.preventDefault();
+  inputElements.forEach((inputElement) => {
+    checkInputValidity(elementForm, inputElement);
+  });
+});
+
 
 enableValidation(validationConfig);
