@@ -1,6 +1,20 @@
-import { addLike, removeLike, cohortId, token, handleResponse, compareIdCard, updateAvatar, deleteCardOnServer } from "./api";
+import {
+  addLike,
+  removeLike,
+  compareIdCard,
+  deleteCardOnServer
+} from "./api";
 import { openWindow, closeWindow } from "./modal";
-export { cardTemplate, popupWatchImage, createCard, handleDelete, likeOnCard, popupDelete, currentCard, cardIdDelete };
+export {
+  cardTemplate,
+  popupWatchImage,
+  createCard,
+  handleDelete,
+  likeOnCard,
+  popupDelete,
+  currentCard,
+  cardIdDelete,
+};
 
 const cardTemplate = document.querySelector("#card-template").content;
 const popupWatchImage = document.querySelector(".popup_type_image");
@@ -55,13 +69,13 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
 
 function handleDelete() {
   deleteCardOnServer(cardIdDelete)
-  .then(() => {
-    currentCard.remove();
-    closeWindow(popupDelete);
-  })
-  .catch((err) => {
-    console.error("Ошибка при удалении карточки:", err);
-  })
+    .then(() => {
+      currentCard.remove();
+      closeWindow(popupDelete);
+    })
+    .catch((err) => {
+      console.error("Ошибка при удалении карточки:", err);
+    });
 }
 
 function likeOnCard(cardId, likeButton, likeCounter) {
@@ -89,5 +103,3 @@ function likeOnCard(cardId, likeButton, likeCounter) {
       });
   }
 }
-
-

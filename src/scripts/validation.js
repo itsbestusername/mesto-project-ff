@@ -15,13 +15,13 @@ export {
 const elementForm = document.querySelector(".popup__form");
 const inputElements = elementForm.querySelectorAll(".popup__input");
 const validationConfig = {
-    formSelector: ".popup__form",
-    inputSelector: ".popup__input",
-    submitButtonSelector: ".popup__button",
-    inactiveButtonClass: "popup__button_disabled",
-    inputErrorClass: "popup__input_type_error",
-    errorClass: "popup__error_visible",
-  };
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
 
 const showError = (elementForm, inputElement, errorMessage) => {
   const formError = elementForm.querySelector(`.${inputElement.id}-error`);
@@ -42,7 +42,11 @@ const hideError = (elementForm, inputElement) => {
 
 const checkInputValidity = (elementForm, inputElement) => {
   const regex = /^[a-zA-Zа-яА-Я\s\-ёЁ]+$/;
-   if (!regex.test(inputElement.value) && inputElement.id !== "link-input" && inputElement.id !== "avatar-link-input") {
+  if (
+    !regex.test(inputElement.value) &&
+    inputElement.id !== "link-input" &&
+    inputElement.id !== "avatar-link-input"
+  ) {
     // встроенный метод setCustomValidity принимает на вход строку
     // и заменяет ею стандартное сообщение об ошибке
     inputElement.setCustomValidity(
@@ -102,8 +106,12 @@ function enableValidation(obj) {
 }
 
 function clearValidation(elementForm, validationConfig) {
-  const inputList = Array.from(elementForm.querySelectorAll(validationConfig.inputSelector));
-  const buttonSubmit = elementForm.querySelector(validationConfig.submitButtonSelector);
+  const inputList = Array.from(
+    elementForm.querySelectorAll(validationConfig.inputSelector)
+  );
+  const buttonSubmit = elementForm.querySelector(
+    validationConfig.submitButtonSelector
+  );
 
   inputList.forEach((inputElement) => {
     hideError(elementForm, inputElement);

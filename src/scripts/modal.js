@@ -1,4 +1,3 @@
-import {elementForm, validationConfig, clearValidation} from "./validation";
 export { openWindow, closeWindow, closeOnEsc, closeOnLayout };
 
 function openWindow(popup) {
