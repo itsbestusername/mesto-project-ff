@@ -80,39 +80,6 @@ Promise.all([getUserInfo, getInitialCards])
     console.log("Ошибка при загрузке данных: ", err);
   });
 
-editAvatarButton.addEventListener("click", () => {
-  openWindow(popupEditAvatar);
-
-  avatarLinkInput.value = "";
-  saveAvaButton.textContent = "Сохранить";
-
-  const form = avatarElement.querySelector(validationConfig.formSelector);
-  clearValidation(form, validationConfig);
-});
-
-closeAvatarButton.addEventListener('click', () => {
-  closeWindow(popupEditAvatar);
-})
-
-avatarForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-
-  const newLink = avatarLinkInput.value;
-
-  changeButtonWord(saveAvaButton);
-  updateAvatar(newLink)
-    .then((link) => {
-      const ava = link.avatar;
-
-      createAvatarElement(ava);
-      console.log("Аватар успешно обновлен");
-      closeWindow(popupEditAvatar);
-    })
-    .catch((err) => {
-      console.error("Не получилось обновить аватар", err);
-    });
-});
-
 function changeButtonWord(button) {
   button.textContent = "Сохранение...";
 }
@@ -197,4 +164,38 @@ confirmButton.addEventListener("click", () => {
 // Обработчик для крестика (закрытия попапа без удаления)
 closeButtonPopupDelete.addEventListener("click", () => {
   closeWindow(popupDelete);
+});
+
+
+editAvatarButton.addEventListener("click", () => {
+  openWindow(popupEditAvatar);
+
+  avatarLinkInput.value = "";
+  saveAvaButton.textContent = "Сохранить";
+
+  const form = avatarElement.querySelector(validationConfig.formSelector);
+  clearValidation(form, validationConfig);
+});
+
+closeAvatarButton.addEventListener('click', () => {
+  closeWindow(popupEditAvatar);
+})
+
+avatarForm.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+
+  const newLink = avatarLinkInput.value;
+
+  changeButtonWord(saveAvaButton);
+  updateAvatar(newLink)
+    .then((link) => {
+      const ava = link.avatar;
+
+      createAvatarElement(ava);
+      console.log("Аватар успешно обновлен");
+      closeWindow(popupEditAvatar);
+    })
+    .catch((err) => {
+      console.error("Не получилось обновить аватар", err);
+    });
 });
