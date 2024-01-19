@@ -6,7 +6,7 @@ import {
   handleDelete,
   likeOnCard,
   popupDelete,
-  card
+  currentCard
 } from "../scripts/card";
 import {
   openWindow,
@@ -37,6 +37,8 @@ import {
   cardContainer,
   popupName,
   popupImage,
+  editAvatarButton,
+  popupEditAvatar,
   watchImage,
   handleResponse,
   getUserInfo,
@@ -81,6 +83,43 @@ const confirmButton = popupDelete.querySelector(
 );
 const closeButtonPopupDelete = popupDelete.querySelector(".popup__close");
 
+// const editAvatarButton = document.querySelector(".profile__image-layout");
+// const popupEditAvatar = document.querySelector(".popup_type_new-avatar");
+const saveAvatarButton = popupEditAvatar.querySelector(".popup__button");
+const avatarLinkInput = popupEditAvatar.querySelector(".avatar-input");
+const avatarForm = document.forms["new-avatar"];
+
+editAvatarButton.addEventListener('click', () => {
+  openWindow(popupEditAvatar);
+
+  avatarLinkInput.value = "";
+})
+
+avatarForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  console.log("click");
+
+  const newLink = avatarLinkInput.value;
+
+  updateAvatar(newLink)
+  .then((link) => {
+    const ava = link.avatar;
+    
+    createAvatarElement(ava);
+    console.log("Аватар успешно обновлен")
+    closeWindow(popupEditAvatar);
+  })
+  .catch((err) => {
+    console.error("Не получилось обновить аватар", err);
+  })
+})
+
+function createAvatarElement(link) {
+  const AvatarElement = document.querySelector(".profile__image");
+
+  AvatarElement.style.backgroundImage = `url('${link}')`;
+  return AvatarElement;
+}
 
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
@@ -174,7 +213,7 @@ elementForm.addEventListener("submit", function (evt) {
 
 // Обработчик для кнопки подтверждения удаления
 confirmButton.addEventListener("click", () => {
-  handleDelete();
+  handleDelete(currentCard);
   console.log("клик сработал")//
 });
 

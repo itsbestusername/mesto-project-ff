@@ -42,7 +42,7 @@ const hideError = (elementForm, inputElement) => {
 
 const checkInputValidity = (elementForm, inputElement) => {
   const regex = /^[a-zA-Zа-яА-Я\s\-ёЁ]+$/;
-   if (!regex.test(inputElement.value) && inputElement.id !== "link-input") {
+   if (!regex.test(inputElement.value) && inputElement.id !== "link-input" && inputElement.id !== "avatar-link-input") {
     // встроенный метод setCustomValidity принимает на вход строку
     // и заменяет ею стандартное сообщение об ошибке
     inputElement.setCustomValidity(

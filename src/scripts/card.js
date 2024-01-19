@@ -1,11 +1,11 @@
 import { addLike, removeLike, cohortId, token, handleResponse, compareIdCard, updateAvatar, deleteCardOnServer } from "./api";
 import { openWindow, closeWindow } from "./modal";
-export { cardTemplate, popupWatchImage, createCard, handleDelete, likeOnCard, popupDelete, card, cardIdDelete };
+export { cardTemplate, popupWatchImage, createCard, handleDelete, likeOnCard, popupDelete, currentCard, cardIdDelete };
 
 const cardTemplate = document.querySelector("#card-template").content;
 const popupWatchImage = document.querySelector(".popup_type_image");
 const popupDelete = document.querySelector(".popup_type_delete");
-let card;
+let currentCard;
 let cardIdDelete;
 
 function createCard(card, handleDelete, likeOnCard, watchImage) {
@@ -37,11 +37,8 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
     .then((res) => {
       if (card.owner._id === res._id) {
         deleteButton.addEventListener("click", (evt) => {
-          console.log(evt); //
-          card = evt.target.closest(".card"); //сохраняю карточку в переменную
+          currentCard = evt.target.closest(".card"); //сохраняю карточку в переменную
           cardIdDelete = card._id;
-          console.log(card);//
-          console.log(cardIdDelete);//
 
           openWindow(popupDelete);
         });
@@ -57,10 +54,9 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
 }
 
 function handleDelete() {
-  console.log(cardIdDelete);//
   deleteCardOnServer(cardIdDelete)
   .then(() => {
-    card.remove();
+    currentCard.remove();
     closeWindow(popupDelete);
   })
   .catch((err) => {

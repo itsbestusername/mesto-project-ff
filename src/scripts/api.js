@@ -10,6 +10,8 @@ export {
   cardContainer,
   popupName,
   popupImage,
+  editAvatarButton,
+  popupEditAvatar,
   watchImage,
   handleResponse,
   getUserInfo,
@@ -33,6 +35,11 @@ const cardContainer = document.querySelector(".places__list");
 
 const popupName = document.querySelector(".popup__caption");
 const popupImage = document.querySelector(".popup__image");
+
+const editAvatarButton = document.querySelector(".profile__image-layout");
+const popupEditAvatar = document.querySelector(".popup_type_new-avatar");
+
+
 
 function watchImage(popup, name, link) {
   openWindow(popupWatchImage);
@@ -168,15 +175,19 @@ function deleteCardOnServer(cardId) {
     .then(handleResponse)
 }
 
-function updateAvatar(ava) {
+function updateAvatar(avaUrl) {
+    console.log(JSON.stringify({ avatar: avaUrl }));
+    console.log(`Sending PATCH request to: https://nomoreparties.co/v1/${cohortId}/users/me/avatar`);
+
     return fetch(`https://nomoreparties.co/v1/${cohortId}/users/me/avatar`,
     {
         method: "PATCH",
         headers: {
             authorization: `${token}`,
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            avatar: ava,
+            avatar: avaUrl,
         })
     })
     .then(handleResponse);
