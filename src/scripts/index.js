@@ -67,13 +67,22 @@ const closeButtonPopupDelete = popupDelete.querySelector(".popup__close");
 const avatarLinkInput = popupEditAvatar.querySelector(".avatar-input");
 const avatarForm = document.forms["new-avatar"];
 const saveAvaButton = avatarForm.querySelector(".popup__button");
+const avatarElement = document.querySelector(".popup_type_new-avatar")
+const closeAvatarButton = avatarElement.querySelector(".popup__close")
 
 editAvatarButton.addEventListener("click", () => {
   openWindow(popupEditAvatar);
 
   avatarLinkInput.value = "";
   saveAvaButton.textContent = "Сохранить";
+
+  const form = avatarElement.querySelector(validationConfig.formSelector);
+  clearValidation(form, validationConfig);
 });
+
+closeAvatarButton.addEventListener('click', () => {
+  closeWindow(popupEditAvatar);
+})
 
 avatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
@@ -200,7 +209,6 @@ elementForm.addEventListener("submit", function (evt) {
 // Обработчик для кнопки подтверждения удаления
 confirmButton.addEventListener("click", () => {
   handleDelete(currentCard);
-  console.log("клик сработал"); //
 });
 
 // Обработчик для крестика (закрытия попапа без удаления)
