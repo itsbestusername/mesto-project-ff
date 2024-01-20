@@ -23,7 +23,6 @@ function closeOnEsc(evt) {
 
 function closeOnLayout(evt) {
   if (evt.target.classList.contains("popup_is-opened")) {
-    const popup = document.querySelector(".popup_is-opened");
-    closeWindow(popup);
+    closeWindow(evt.target);
   }
 }

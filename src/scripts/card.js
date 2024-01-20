@@ -1,9 +1,4 @@
-import {
-  addLike,
-  removeLike,
-  compareIdCard,
-  deleteCardOnServer
-} from "./api";
+import { addLike, removeLike, compareIdCard, deleteCardOnServer } from "./api";
 import { openWindow, closeWindow } from "./modal";
 export {
   cardTemplate,
@@ -22,7 +17,13 @@ const popupDelete = document.querySelector(".popup_type_delete");
 let currentCard;
 let cardIdDelete;
 
-function createCard(card, handleDelete, likeOnCard, watchImage) {
+function createCard(
+  card,
+  handleDelete,
+  likeOnCard,
+  watchImage,
+  initialProfileId
+) {
   const cardElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
@@ -31,25 +32,18 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
   cardElement.querySelector(".card__image").alt = card.name;
   cardElement.querySelector(".card__title").textContent = card.name;
 
-  const likeButton = cardElement.querySelector(".card__like-button");
-  likeButton.addEventListener("click", function () {
-    const cardId = card._id;
-    likeOnCard(cardId, likeButton, likeCounter);
-  });
-
-  const likeCounter = cardElement.querySelector(".card__like-counter");
-  // Определите начальное количество лайков
-  likeCounter.textContent = card.likes.length;
-
   const cardImage = cardElement.querySelector(".card__image");
   cardImage.addEventListener("click", () => {
     watchImage(popupWatchImage, card.name, card.link);
   });
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
+  let profileId = initialProfileId;
   compareIdCard()
     .then((res) => {
-      if (card.owner._id === res._id) {
+      profileId = res._id;
+
+      if (card.owner._id === profileId) {
         deleteButton.addEventListener("click", (evt) => {
           currentCard = evt.target.closest(".card"); //сохраняю карточку в переменную
           cardIdDelete = card._id;
@@ -63,6 +57,25 @@ function createCard(card, handleDelete, likeOnCard, watchImage) {
     .catch((res) => {
       console.error("Ошибка сравнения id карты");
     });
+
+  const likeButton = cardElement.querySelector(".card__like-button");
+  const likeCounter = cardElement.querySelector(".card__like-counter");
+  // Определить начальное количество лайков
+  likeCounter.textContent = card.likes.length;
+
+  // Проверить, лайкнута ли карточка текущим пользователем
+  const haveMyLike = card.likes.some((like) => {
+    return like._id === profileId;
+  });
+  //если да, то проставляем активный класс лайку
+  if (haveMyLike) {
+    likeButton.classList.add("card__like-button_is-active");
+  }
+
+  likeButton.addEventListener("click", function () {
+    const cardId = card._id;
+    likeOnCard(cardId, likeButton, likeCounter);
+  });
 
   return cardElement;
 }

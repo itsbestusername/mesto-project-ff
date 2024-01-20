@@ -1,22 +1,8 @@
+import {validationConfig} from "./index.js"
 export {
-  nameEditForm,
-  description,
-  validationConfig,
+  enableValidation,
   clearValidation
 };
-
-const elementForm = document.querySelector(".popup__form");
-const inputElements = elementForm.querySelectorAll(".popup__input");
-const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
-const nameEditForm = document.querySelector(".popup__input_type_name");
-const description = document.querySelector(".popup__input_type_description");
 
 const showError = (elementForm, inputElement, errorMessage) => {
   const formError = elementForm.querySelector(`.${inputElement.id}-error`);
@@ -36,39 +22,16 @@ const hideError = (elementForm, inputElement) => {
 };
 
 const checkInputValidity = (elementForm, inputElement) => {
-  const regex = /^[a-zA-Zа-яА-Я\s\-ёЁ]+$/;
-  if (
-    !regex.test(inputElement.value) &&
-    inputElement.id !== "link-input" &&
-    inputElement.id !== "avatar-link-input"
-  ) {
-    // встроенный метод setCustomValidity принимает на вход строку
-    // и заменяет ею стандартное сообщение об ошибке
-    inputElement.setCustomValidity(
-      "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы."
-    );
-  } else {
-    // если передать пустую строку, то будут доступны
-    // стандартные браузерные сообщения
-    inputElement.setCustomValidity("");
-  }
-  if (!inputElement.validity.valid) {
-    showError(elementForm, inputElement, inputElement.validationMessage);
-  } else {
-    hideError(elementForm, inputElement);
-  }
-};
-
-// Обработчик «отправки» формы
-function handleFormSubmit(evt) {
-  evt.preventDefault();
-
-  const newName = nameEditForm.value;
-  const newAbout = description.value;
-
-  changeButtonWord(saveProfileButton);
-  updateUserInfo(newName, newAbout);
-  closeWindow(popupEdit);
+  if (inputElement.validity.patternMismatch) { 
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage); 
+  } else { 
+    inputElement.setCustomValidity(""); 
+  } 
+ if (!inputElement.validity.valid) { 
+  showError(elementForm, inputElement, inputElement.validationMessage); 
+} else { 
+  hideError(elementForm, inputElement); 
+}
 }
 
 function hasInvalidInput(inputList) {
@@ -79,17 +42,17 @@ function hasInvalidInput(inputList) {
 
 function changeButtonState(inputList, buttonSubmit) {
   if (hasInvalidInput(inputList)) {
-    buttonSubmit.classList.add("popup__button_disabled");
+    buttonSubmit.classList.add(validationConfig.inactiveButtonClass);
     buttonSubmit.setAttribute("disabled", true);
   } else {
-    buttonSubmit.classList.remove("popup__button_disabled");
+    buttonSubmit.classList.remove(validationConfig.inactiveButtonClass);
     buttonSubmit.removeAttribute("disabled", true);
   }
 }
 
-function addListeners(obj, elementForm) {
-  const inputList = Array.from(elementForm.querySelectorAll(obj.inputSelector));
-  const buttonSubmit = elementForm.querySelector(obj.submitButtonSelector);
+function addListeners(elementForm) {
+  const inputList = Array.from(elementForm.querySelectorAll(validationConfig.inputSelector));
+  const buttonSubmit = elementForm.querySelector(validationConfig.submitButtonSelector);
 
   changeButtonState(inputList, buttonSubmit);
 
@@ -108,11 +71,11 @@ function enableValidation(obj) {
     elementForm.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
-    addListeners(obj, elementForm);
+    addListeners(elementForm);
   });
 }
 
-function clearValidation(elementForm, validationConfig) {
+function clearValidation(elementForm) {
   const inputList = Array.from(
     elementForm.querySelectorAll(validationConfig.inputSelector)
   );
@@ -124,24 +87,6 @@ function clearValidation(elementForm, validationConfig) {
     hideError(elementForm, inputElement);
     inputElement.setCustomValidity("");
   });
-
+  elementForm.reset();
   changeButtonState(inputList, buttonSubmit);
 }
-
-elementForm.addEventListener("submit", handleFormSubmit);
-
-inputElements.forEach((inputElement) => {
-  inputElement.addEventListener("input", function () {
-    checkInputValidity(elementForm, inputElement);
-  });
-});
-
-elementForm.addEventListener("submit", function (evt) {
-  evt.preventDefault();
-  inputElements.forEach((inputElement) => {
-    checkInputValidity(elementForm, inputElement);
-  });
-});
-
-
-enableValidation(validationConfig);

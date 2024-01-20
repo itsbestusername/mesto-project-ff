@@ -59,6 +59,8 @@
               required
               minlength="2"
               maxlength="40"
+              pattern = "^[a-zA-Zа-яА-Я\s\-ёЁ]+$"
+              data-error-message = "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы."
             />
             <span class="popup__input-error name-input-error"></span>
             <input
@@ -70,6 +72,8 @@
               required
               minlength="2"
               maxlength="200"
+              pattern = "^[a-zA-Zа-яА-Я\s\-ёЁ]+$"
+              data-erroressage = "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы."
             />
             <span class="popup__input-error about-input-error"></span>
             <button type="submit" class="button popup__button">
@@ -92,6 +96,8 @@
               required
               minlength="2"
               maxlength="30"
+              pattern = "^[a-zA-Zа-яА-Я\s\-ёЁ]+$"
+              data-error-message = "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы."
             />
             <span class="popup__input-error place-input-error"></span>
             <input

@@ -7,29 +7,24 @@ import {
   popupDelete,
   currentCard,
 } from "../scripts/card";
-import {
-  openWindow,
-  closeWindow
-} from "../scripts/modal";
-import {
-  nameEditForm,
-  description,
-  validationConfig,
-  clearValidation
-} from "./validation";
+import { openWindow, closeWindow } from "../scripts/modal";
+import { enableValidation, clearValidation } from "./validation";
 
 import {
-  getUserInfo,
-  getInitialCards,
   profileTitle,
   profileDescription,
   profileAvatar,
   cardContainer,
   editAvatarButton,
   popupEditAvatar,
+  getUserInfo,
+  getInitialCards,
+  updateUserInfo,
   addNewCard,
-  updateAvatar
+  updateAvatar,
 } from "./api";
+
+export { validationConfig };
 
 const cards = cardContainer.querySelectorAll(".card");
 
@@ -46,19 +41,22 @@ const popupEdit = document.querySelector(".popup_type_edit");
 const editCloseButton = document.querySelector(
   ".popup_type_edit .popup__close"
 );
-// const nameEditForm = document.querySelector(".popup__input_type_name");
-// const description = document.querySelector(".popup__input_type_description");
+
+const nameEditForm = document.querySelector(".popup__input_type_name"); //
+const description = document.querySelector(".popup__input_type_description"); //
+
 const editProfileForm = document.forms["edit-profile"];
 const saveProfileButton = editProfileForm.querySelector(".popup__button");
+
+const popupName = document.querySelector(".popup__caption");
+const popupImage = document.querySelector(".popup__image");
 
 const watchImageCloseButton = document.querySelector(
   ".popup_type_image .popup__close"
 );
 
-let nameOfCard = document.querySelector(".popup__input_type_card-name");
-let linkOfCard = document.querySelector(".popup__input_type_url");
-const nameValue = nameOfCard.value;
-const linkValue = linkOfCard.value;
+const nameOfCard = document.querySelector(".popup__input_type_card-name");
+const linkOfCard = document.querySelector(".popup__input_type_url");
 
 const confirmButton = popupDelete.querySelector(".popup_type_delete-button");
 const closeButtonPopupDelete = popupDelete.querySelector(".popup__close");
@@ -66,15 +64,36 @@ const closeButtonPopupDelete = popupDelete.querySelector(".popup__close");
 const avatarLinkInput = popupEditAvatar.querySelector(".avatar-input");
 const avatarForm = document.forms["new-avatar"];
 const saveAvaButton = avatarForm.querySelector(".popup__button");
-const avatarElement = document.querySelector(".popup_type_new-avatar")
-const closeAvatarButton = avatarElement.querySelector(".popup__close")
+const avatarElement = document.querySelector(".popup_type_new-avatar");
+const closeAvatarButton = avatarElement.querySelector(".popup__close");
 
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+let initialProfileId;
 
 Promise.all([getUserInfo, getInitialCards])
   .then(([userInfo, initialCards]) => {
     profileTitle.textContent = userInfo.name;
     profileDescription.textContent = userInfo.about;
     profileAvatar.style.backgroundImage = `url('${userInfo.avatar}')`;
+
+    initialCards.forEach((card) => {
+      initialProfileId = userInfo._id;
+      const place = createCard(
+        card,
+        handleDelete,
+        likeOnCard,
+        watchImage,
+        initialProfileId
+      );
+      cardContainer.append(place);
+    });
   })
   .catch((err) => {
     console.log("Ошибка при загрузке данных: ", err);
@@ -95,29 +114,48 @@ function handleCreateCard(evt) {
   const nameOfNewCard = nameOfCard.value;
   const linkOfNewCard = linkOfCard.value;
 
-  if (nameOfNewCard.length > 0 && linkOfNewCard.length > 0) {
-    const newCard = { name: nameOfNewCard, link: linkOfNewCard };
-    changeButtonWord(saveNewCard);
-    addNewCard(newCard)
-      .then((newCard) => {
-        const newCardElement = createCard(
-          newCard,
-          handleDelete,
-          likeOnCard,
-          watchImage
-        );
-        cardContainer.prepend(newCardElement);
+  const newCard = { name: nameOfNewCard, link: linkOfNewCard };
+  changeButtonWord(saveNewCard);
+  addNewCard(newCard)
+    .then((newCard) => {
+      const newCardElement = createCard(
+        newCard,
+        handleDelete,
+        likeOnCard,
+        watchImage,
+        initialProfileId
+      );
+      cardContainer.prepend(newCardElement);
 
-        closeWindow(popupNewCard);
-        elementCardForm.reset();
-      })
-      .catch((err) => {
-        console.error("Ошибка при добавлении карточки на страницу:", err);
-      });
-  } else {
-    console.error("Ошибка: Новая карточка не получена от сервера.");
-  }
+      closeWindow(popupNewCard);
+      elementCardForm.reset();
+    })
+    .catch((err) => {
+      console.error("Ошибка при добавлении карточки на страницу:", err);
+    });
 }
+
+function watchImage(popup, name, link) {
+  openWindow(popupWatchImage);
+
+  popupName.textContent = name;
+  popupImage.src = link;
+  popupImage.alt = name;
+}
+
+// Обработчик «отправки» формы
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+
+  const newName = nameEditForm.value;
+  const newAbout = description.value;
+
+  changeButtonWord(saveProfileButton);
+  updateUserInfo(newName, newAbout);
+  closeWindow(popupEdit);
+}
+
+editProfileForm.addEventListener("submit", handleFormSubmit);
 
 elementCardForm.addEventListener("submit", (evt) => {
   handleCreateCard(evt);
@@ -166,7 +204,6 @@ closeButtonPopupDelete.addEventListener("click", () => {
   closeWindow(popupDelete);
 });
 
-
 editAvatarButton.addEventListener("click", () => {
   openWindow(popupEditAvatar);
 
@@ -177,9 +214,9 @@ editAvatarButton.addEventListener("click", () => {
   clearValidation(form, validationConfig);
 });
 
-closeAvatarButton.addEventListener('click', () => {
+closeAvatarButton.addEventListener("click", () => {
   closeWindow(popupEditAvatar);
-})
+});
 
 avatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
@@ -199,3 +236,5 @@ avatarForm.addEventListener("submit", (evt) => {
       console.error("Не получилось обновить аватар", err);
     });
 });
+
+enableValidation(validationConfig);
