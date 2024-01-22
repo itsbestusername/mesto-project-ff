@@ -38,12 +38,10 @@ function createCard(
   });
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  let profileId = initialProfileId;
+
   compareIdCard()
     .then((res) => {
-      profileId = res._id;
-
-      if (card.owner._id === profileId) {
+      if (card.owner._id === initialProfileId) {
         deleteButton.addEventListener("click", (evt) => {
           currentCard = evt.target.closest(".card"); //сохраняю карточку в переменную
           cardIdDelete = card._id;
@@ -65,7 +63,7 @@ function createCard(
 
   // Проверить, лайкнута ли карточка текущим пользователем
   const haveMyLike = card.likes.some((like) => {
-    return like._id === profileId;
+    return like._id === initialProfileId;
   });
   //если да, то проставляем активный класс лайку
   if (haveMyLike) {

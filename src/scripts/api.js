@@ -1,10 +1,4 @@
 export {
-  profileTitle,
-  profileDescription,
-  profileAvatar,
-  cardContainer,
-  editAvatarButton,
-  popupEditAvatar,
   handleResponse,
   getUserInfo,
   getInitialCards,
@@ -22,19 +16,10 @@ const token = "597cc019-8c26-4a34-b1e3-c76effdfead7";
 const ApiBaseUrl = "https://nomoreparties.co/v1/";
 const userUrl = `${ApiBaseUrl}${cohortId}/users/me`;
 const cardsUrl = `${ApiBaseUrl}${cohortId}/cards`;
-const likesUrl = `${ApiBaseUrl}${cohortId}/cards/likes`;
 const commonHeaders = {
   authorization: `${token}`,
   "Content-Type": "application/json",
 };
-
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-const profileAvatar = document.querySelector(".profile__image");
-const cardContainer = document.querySelector(".places__list");
-
-const editAvatarButton = document.querySelector(".profile__image-layout");
-const popupEditAvatar = document.querySelector(".popup_type_new-avatar");
 
 const handleResponse = (res) => {
   if (res.ok) {
@@ -57,26 +42,14 @@ const getInitialCards = fetch(`https://nomoreparties.co/v1/${cohortId}/cards`, {
 }).then(handleResponse);
 
 function updateUserInfo(name, about) {
-  fetch(userUrl, {
+  return fetch(userUrl, {
     method: "PATCH",
     headers: commonHeaders,
     body: JSON.stringify({
       name: name,
       about: about,
     }),
-  })
-    .then(handleResponse)
-    .then((data) => {
-      console.log("Данные успешно обновлены");
-
-      profileTitle.textContent = data.name;
-      profileDescription.textContent = data.about;
-      profileAvatar.src = data.avatar;
-      profileAvatar.alt = data.name;
-    })
-    .catch((err) => {
-      console.log("Ошибка при обновлении данных пользователя:", err);
-    });
+  }).then(handleResponse);
 }
 
 function addNewCard(cardData) {
