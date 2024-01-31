@@ -1,4 +1,4 @@
-import { addLike, removeLike, compareIdCard, deleteCardOnServer } from "./api";
+import { addLike, removeLike, deleteCardOnServer } from "./api";
 import { openWindow, closeWindow } from "./modal";
 export {
   cardTemplate,
@@ -38,23 +38,16 @@ function createCard(
   });
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
+  if (card.owner._id === initialProfileId) {
+    deleteButton.addEventListener("click", (evt) => {
+      currentCard = evt.target.closest(".card"); //сохраняю карточку в переменную
+      cardIdDelete = card._id;
 
-  compareIdCard()
-    .then((res) => {
-      if (card.owner._id === initialProfileId) {
-        deleteButton.addEventListener("click", (evt) => {
-          currentCard = evt.target.closest(".card"); //сохраняю карточку в переменную
-          cardIdDelete = card._id;
-
-          openWindow(popupDelete);
-        });
-      } else {
-        deleteButton.style.display = "none";
-      }
-    })
-    .catch((res) => {
-      console.error("Ошибка сравнения id карты");
+      openWindow(popupDelete);
     });
+  } else {
+    deleteButton.style.display = "none";
+  }
 
   const likeButton = cardElement.querySelector(".card__like-button");
   const likeCounter = cardElement.querySelector(".card__like-counter");

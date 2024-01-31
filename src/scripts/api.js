@@ -6,7 +6,6 @@ export {
   addNewCard,
   addLike,
   removeLike,
-  compareIdCard,
   deleteCardOnServer,
   updateAvatar,
 };
@@ -78,13 +77,6 @@ function removeLike(cardId, likeButton, likeCounter) {
     headers: {
       authorization: `${token}`,
     },
-  }).then(handleResponse);
-}
-
-function compareIdCard() {
-  return fetch(userUrl, {
-    method: "GET",
-    headers: commonHeaders,
   }).then(handleResponse);
 }
 
